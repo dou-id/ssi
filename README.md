@@ -17,6 +17,7 @@ including embedded systems. This library is embedded in the the cross-platform
 ## Security Audits
 
 ssi has undergone the following security reviews:
+
 - [March 14th, 2022 - Trail of Bits](https://github.com/trailofbits/publications/blob/master/reviews/SpruceID.pdf) | [Summary of Findings](https://blog.spruceid.com/spruce-completes-first-security-audit-from-trail-of-bits/)
 
 We are setting up a process to accept contributions. Please feel free to open
@@ -34,7 +35,7 @@ ssi = "0.4"
 ### From Source
 
 ```sh
-$ git clone https://github.com/spruceid/ssi
+$ git clone https://github.com/pitpa/ssi
 $ cd ssi
 $ git submodule update --init
 $ cargo build

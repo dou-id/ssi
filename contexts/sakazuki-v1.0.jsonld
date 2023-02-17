@@ -1,0 +1,116 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@protected": true,
+    "id": "@id",
+    "type": "@type",
+    "CareerCredential": {
+      "@id": "https://schema.sakazuki.xyz/credentials#CareerCredential",
+      "@context": {
+        "@version": 1.1,
+        "@protected": true,
+        "id": "@id",
+        "type": "@type",
+        "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+        "name": "http://schema.org/name",
+        "description": "http://schema.org/description"
+      }
+    },
+    "CareerCredentialSubject": {
+      "@id": "sakazuki:credentialSubject",
+      "@type": "@id",
+      "@context": {
+        "@version": 1.1,
+        "@protected": true,
+        "id": "@id",
+        "type": "@type",
+        "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+        "name": "http://schema.org/name",
+        "company": {
+          "@id": "sakazuki:company",
+          "@type": "@id"
+        },
+        "startDate": {
+          "@id": "http://schema.org/startDate",
+          "@type": "@id"
+        },
+        "endDate": {
+          "@id": "http://schema.org/endDate",
+          "@type": "@id"
+        },
+        "employmentType": {
+          "@id": "http://schema.org/employmentType",
+          "@type": "@id"
+        },
+        "workFrequency": {
+          "@id": "sakazuki:workFrequency",
+          "@type": "@id"
+        },
+        "workLocation": {
+          "@id": "sakazuki:workLocation",
+          "@type": "@id"
+        },
+        "project": {
+          "@id": "sakazuki:project",
+          "@type": "@id",
+          "@container": "@list"
+        },
+        "salary": {
+          "@id": "sakazuki:salary",
+          "@type": "@id"
+        }
+      }
+    },
+    "EducationalCredential": {
+      "@id": "https://schema.sakazuki.xyz/credentials#EducationalCredential",
+      "@context": {
+        "@version": 1.1,
+        "@protected": true,
+        "id": "@id",
+        "type": "@type",
+        "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+        "name": "http://schema.org/name",
+        "description": "http://schema.org/description"
+      }
+    },
+    "EducationalCredentialSubject": {
+      "@id": "sakazuki:credentialSubject",
+      "@type": "@id",
+      "@context": {
+        "@version": 1.1,
+        "@protected": true,
+        "id": "@id",
+        "type": "@type",
+        "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+        "name": "http://schema.org/name",
+        "degree": {
+          "@id": "sakazuki:degree",
+          "@type": "@id",
+          "@context": {
+            "@version": 1.1,
+            "@protected": true,
+            "id": "@id",
+            "type": "@type",
+            "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+            "dateEarned": {
+              "@id": "https://schema.org/Date",
+              "@type": "@id"
+            },
+            "degreeOf": {
+              "@id": "sakazuki:degreeOf",
+              "@type": "@id"
+            },
+            "facultyOf": {
+              "@id": "sakazuki:facultyOf",
+              "@type": "@id"
+            },
+            "departmentOf": {
+              "@id": "sakazuki:departmentOf",
+              "@type": "@id"
+            }
+          }
+        }
+      }
+    }
+  }
+}
