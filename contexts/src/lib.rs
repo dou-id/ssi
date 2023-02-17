@@ -71,3 +71,4 @@ pub const SOLVM: &str = include_str!("../solvm.jsonld");
 pub const ALEOVM: &str = include_str!("../aleovm.jsonld");
 
 pub const SAKAZUKI_V1_0: &str = include_str!("../sakazuki-v1.0.jsonld");
+pub const SAKAZUKI_V1_1: &str = include_str!("../sakazuki-v1.1.jsonld");
