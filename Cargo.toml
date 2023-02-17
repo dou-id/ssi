@@ -1,11 +1,11 @@
 [package]
 name = "ssi"
 version = "0.5.0"
-authors = ["Spruce Systems, Inc."]
+authors = ["PitPa, Inc."]
 edition = "2021"
 license = "Apache-2.0"
 description = "Core library for Verifiable Credentials and Decentralized Identifiers."
-repository = "https://github.com/spruceid/ssi/"
+repository = "https://github.com/pitpa/ssi/"
 documentation = "https://docs.rs/ssi/"
 keywords = ["ssi", "did", "vc", "vp", "jsonld"]
 
