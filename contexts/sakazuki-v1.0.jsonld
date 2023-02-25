@@ -100,10 +100,6 @@
               "@id": "sakazuki:degreeOf",
               "@type": "@id"
             },
-            "facultyOf": {
-              "@id": "sakazuki:facultyOf",
-              "@type": "@id"
-            },
             "departmentOf": {
               "@id": "sakazuki:departmentOf",
               "@type": "@id"
