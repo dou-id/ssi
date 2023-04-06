@@ -37,19 +37,19 @@
             "sakazuki": "https://schema.sakazuki.xyz/credentials#",
             "name": "http://schema.org/name",
             "url": {
-              "id": "sakazuki:url",
+              "@id": "sakazuki:url",
               "@type": "@id"
             },
             "telephone": {
-              "id": "sakazuki:telephone",
+              "@id": "sakazuki:telephone",
               "@type": "@id"
             },
             "location": {
-              "id": "sakazuki:location",
+              "@id": "sakazuki:location",
               "@type": "@id"
             },
             "country": {
-              "id": "sakazuki:country",
+              "@id": "sakazuki:country",
               "@type": "@id"
             }
           }
@@ -76,11 +76,11 @@
             "type": "@type",
             "sakazuki": "https://schema.sakazuki.xyz/credentials#",
             "hours": {
-              "id": "sakazuki:hours",
+              "@id": "sakazuki:hours",
               "@type": "@id"
             },
             "unit": {
-              "id": "sakazuki:unit",
+              "@id": "sakazuki:unit",
               "@type": "@id"
             }
           }
@@ -162,15 +162,15 @@
             "type": "@type",
             "sakazuki": "https://schema.sakazuki.xyz/credentials#",
             "code": {
-              "id": "sakazuki:code",
+              "@id": "sakazuki:code",
               "@type": "@id"
             },
             "amount": {
-              "id": "sakazuki:amount",
+              "@id": "sakazuki:amount",
               "@type": "@id"
             },
             "unit": {
-              "id": "sakazuki:unit",
+              "@id": "sakazuki:unit",
               "@type": "@id"
             }
           }
@@ -186,19 +186,19 @@
             "type": "@type",
             "sakazuki": "https://schema.sakazuki.xyz/credentials#",
             "title": {
-              "id": "sakazuki:title",
+              "@id": "sakazuki:title",
               "@type": "@id"
             },
             "awardDate": {
-              "id": "sakazuki:awardDate",
+              "@id": "sakazuki:awardDate",
               "@type": "@id"
             },
             "detail": {
-              "id": "sakazuki:detail",
+              "@id": "sakazuki:detail",
               "@type": "@id"
             },
             "externalUrl": {
-              "id": "sakazuki:externalUrl",
+              "@id": "sakazuki:externalUrl",
               "@type": "@id"
             }
           }
