@@ -89,8 +89,8 @@
           "@id": "sakazuki:workLocation",
           "@type": "@id"
         },
-        "project": {
-          "@id": "sakazuki:project",
+        "history": {
+          "@id": "sakazuki:history",
           "@type": "@id",
           "@container": "@list",
           "@context": {
