@@ -145,6 +145,10 @@
               "@id": "sakazuki:value",
               "@type": "@id"
             },
+            "thanks": {
+              "@id": "sakazuki:thanks",
+              "@type": "@id"
+            },
             "skills": {
               "@id": "sakazuki:skills",
               "@type": "@id",
