@@ -239,6 +239,34 @@
           }
         }
       }
+    },
+    "SkillCredential": {
+      "@id": "https://schema.sakazuki.xyz/credentials#SkillCredential",
+      "@context": {
+        "@version": 1.1,
+        "@protected": true,
+        "id": "@id",
+        "type": "@type",
+        "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+        "name": "http://schema.org/name",
+        "description": "http://schema.org/description"
+      }
+    },
+    "SkillCredentialSubject": {
+      "@id": "sakazuki:credentialSubject",
+      "@type": "@id",
+      "@context": {
+        "@version": 1.1,
+        "@protected": true,
+        "id": "@id",
+        "type": "@type",
+        "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+        "name": "http://schema.org/name",
+        "skill": {
+          "@id": "sakazuki:skill",
+          "@type": "@json"
+        }
+      }
     }
   }
 }
