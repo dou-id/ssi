@@ -77,6 +77,12 @@ pub const JFF_VC_EDU_PLUGFEST_2022_2_CONTEXT: Iri =
     iri!("https://purl.imsglobal.org/spec/ob/v3p0/context.json");
 pub const SAKAZUKI_V1_0_CONTEXT: Iri =
     iri!("https://schema.sakazuki.xyz/credentials/v1.0.jsonld");
+pub const MORITA_SANDBOX_SAKAZUKI_V1_0_CONTEXT: Iri =
+    iri!("https://morita.sandbox.sakazuki.xyz/credentials/v1.0.jsonld");
+pub const EIKEN_V1_0_CONTEXT: Iri =
+    iri!("https://schema.eiken.or.jp/credentials/v1.0.jsonld");
+pub const STG_EIKEN_V1_0_CONTEXT: Iri =
+    iri!("https://schema-stg.eiken.or.jp/credentials/v1.0.jsonld");
 
 /// Load a remote context from its static definition.
 fn load_static_context(iri: Iri, content: &str) -> RemoteDocument {
@@ -222,6 +228,18 @@ lazy_static::lazy_static! {
         SAKAZUKI_V1_0_CONTEXT,
         ssi_contexts::SAKAZUKI_V1_0
     );
+    pub static ref MORITA_SANDBOX_SAKAZUKI_V1_0_CONTEXT_DOCUMENT: RemoteDocument = load_static_context(
+        MORITA_SANDBOX_SAKAZUKI_V1_0_CONTEXT,
+        ssi_contexts::SAKAZUKI_V1_0
+    );
+    pub static ref EIKEN_V1_0_CONTEXT_DOCUMENT: RemoteDocument = load_static_context(
+        EIKEN_V1_0_CONTEXT,
+        ssi_contexts::SAKAZUKI_V1_0
+    );
+    pub static ref STG_EIKEN_V1_0_CONTEXT_DOCUMENT: RemoteDocument = load_static_context(
+        STG_EIKEN_V1_0_CONTEXT,
+        ssi_contexts::SAKAZUKI_V1_0
+    );
 }
 
 macro_rules! iri_match {
@@ -306,6 +324,15 @@ impl Loader<IriBuf, Span> for StaticLoader {
                     },
                     SAKAZUKI_V1_0_CONTEXT => {
                         Ok(SAKAZUKI_V1_0_CONTEXT_DOCUMENT.clone())
+                    },
+                    MORITA_SANDBOX_SAKAZUKI_V1_0_CONTEXT => {
+                        Ok(MORITA_SANDBOX_SAKAZUKI_V1_0_CONTEXT_DOCUMENT.clone())
+                    },
+                    EIKEN_V1_0_CONTEXT => {
+                        Ok(EIKEN_V1_0_CONTEXT_DOCUMENT.clone())
+                    },
+                    STG_EIKEN_V1_0_CONTEXT => {
+                        Ok(STG_EIKEN_V1_0_CONTEXT_DOCUMENT.clone())
                     },
                     _ as iri => Err(UnknownContext(iri))
                 }
