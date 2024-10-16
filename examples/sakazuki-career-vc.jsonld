@@ -1,0 +1,83 @@
+{
+  "id": "urn:uuid:47cc0529-5b5c-4032-87e8-ed926131365e",
+  "name": "PitPa Career Credential",
+  "type": [
+    "VerifiableCredential",
+    "CareerCredential"
+  ],
+  "proof": {
+    "jws": "eyJhbGciOiJFUzI1NksiLCJjcml0IjpbImI2NCJdLCJiNjQiOmZhbHNlfQ..rYGpT5FJZ8keeOh58XmRsVlYXrn5hDSiI14CKcg3OsVD_ehp7gLZWWj1GWpaeuryDEzm4UuGup2DjoXq9XURAA",
+    "type": "EcdsaSecp256k1Signature2019",
+    "created": "2024-10-15T04:55:56.707Z",
+    "proofPurpose": "assertionMethod",
+    "verificationMethod": "did:key:zQ3shv1ha5wxEyqL6SEWcV8GzwH6zA3zZhxKG72ydxGvDhV2J#zQ3shv1ha5wxEyqL6SEWcV8GzwH6zA3zZhxKG72ydxGvDhV2J"
+  },
+  "issuer": "did:key:zQ3shv1ha5wxEyqL6SEWcV8GzwH6zA3zZhxKG72ydxGvDhV2J",
+  "@context": [
+    "https://www.w3.org/2018/credentials/v1",
+    "https://w3id.org/vc/status-list/2021/v1",
+    "https://schema.sakazuki.xyz/credentials/v1.0.jsonld"
+  ],
+  "description": "PitPa Career Credential is an official",
+  "issuanceDate": "2024-10-15T04:53:56.540Z",
+  "credentialSchema": {
+    "id": "https://schema.sakazuki.xyz/credentials/career/v1.0.json",
+    "type": "JsonSchemaValidator2018"
+  },
+  "credentialStatus": {
+    "id": "https://localhost:3001/api/career-credential-status-lists/uhs2yvmtqduw4stmbhbgct59#8",
+    "type": "StatusList2021Entry",
+    "statusPurpose": "revocation",
+    "statusListIndex": "8",
+    "statusListCredential": "https://localhost:3001/api/career-credential-status-lists/uhs2yvmtqduw4stmbhbgct59"
+  },
+  "credentialSubject": {
+    "name": "森田フィードバック",
+    "type": "CareerCredentialSubject",
+    "award": [
+      {
+        "title": "現状の職歴スキーマでのアワード発行",
+        "detail": "現状の職歴スキーマでのアワード発行の詳細確認",
+        "awardDate": "2024-10-14"
+      }
+    ],
+    "company": {
+      "name": "PitPa"
+    },
+    "history": [
+      {
+        "role": [],
+        "title": "メール通知確認ヒストリー",
+        "value": "プロジェクト型証明書hoge\n\nプロジェクト型証明書hoge\n\nプロジェクト型証明書hoge",
+        "skills": [],
+        "thanks": "プロジェクト型証明書hoge",
+        "endDate": "",
+        "language": [],
+        "startDate": "2024-08-01",
+        "teamStructure": "プロジェクト型証明書hoge"
+      },
+      {
+        "role": [
+          "リーダー",
+          "リーダー2"
+        ],
+        "title": "現状の職歴スキーマでの発行確認",
+        "value": "現状の職歴スキーマでの発行確認の概要\n\n現状の職歴スキーマでの発行確認の業務内容\n\n現状の職歴スキーマでの発行確認の成果",
+        "skills": [
+          "Java",
+          "Ruby"
+        ],
+        "thanks": "現状の職歴スキーマでの発行確認の評価フィードバック",
+        "endDate": "2024-10-14",
+        "language": [
+          "日本語",
+          "ジンバブエ語"
+        ],
+        "startDate": "2024-10-01",
+        "teamStructure": "5人"
+      }
+    ],
+    "startDate": "2024-07-01T00:00:00.000Z",
+    "employmentType": "full-time"
+  }
+}

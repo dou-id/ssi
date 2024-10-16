@@ -1884,6 +1884,7 @@ pub(crate) mod tests {
     use ssi_dids::{example::DIDExample, VerificationMethodMap};
     use ssi_json_ld::urdna2015;
     use ssi_ldp::{ProofSuite, ProofSuiteType};
+    use did_method_key::DIDKey;
 
     #[test]
     fn numeric_date() {
@@ -3737,5 +3738,39 @@ _:c14n0 <https://w3id.org/security#verificationMethod> <https://example.org/foo/
         assert!(verification_result.errors.is_empty());
 
         assert_eq!(sig_hex, "0xd9a03af99298b50303343ae7b89e14eb7622d64023ddb2df6c220bd5b017fa2b48ab09a6754042eeeb3785ab64f3eab1dd4fd89dbbbbd0181f135b1b938b99841c");
+    }
+
+    // #[async_std::test]
+    // async fn sakazuki_career_credential_json() {
+    //     let credential_str = include_str!("../../examples/sakazuki-career-vc.jsonld");
+    //     let vc: Credential = serde_json::from_str(credential_str).unwrap();
+    //     let mut context_loader = ssi_json_ld::ContextLoader::default();
+    //     let credential_dataset = vc
+    //         .to_dataset_for_signing(None, &mut context_loader)
+    //         .await
+    //         .unwrap();
+    //     let credential_dataset_normalized =
+    //         urdna2015::normalize(credential_dataset.quads().map(Into::into));
+    //     let credential_urdna2015 = credential_dataset_normalized.into_nquads();
+    //     eprintln!("career credential:\n{}", credential_urdna2015);
+    //     assert_eq!(true, false);
+    // }
+
+    #[async_std::test]
+    async fn sakazuki_edu_credential_json() {
+        let credential_str = include_str!("../../examples/sakazuki-edu-vc.jsonld");
+        let vc: Credential = serde_json::from_str(credential_str).unwrap();
+        let mut context_loader = ssi_json_ld::ContextLoader::default();
+        let credential_dataset = vc
+            .to_dataset_for_signing(None, &mut context_loader)
+            .await
+            .unwrap();
+        let credential_dataset_normalized =
+            urdna2015::normalize(credential_dataset.quads().map(Into::into));
+        let credential_urdna2015 = credential_dataset_normalized.into_nquads();
+        eprintln!("edu credential:\n{}", credential_urdna2015);
+        let verification_result = vc.verify(None, &DIDKey, &mut context_loader).await;
+        eprintln!("検証結果の中身:\n{:#?}", verification_result);
+        assert!(verification_result.errors.is_empty());
     }
 }
