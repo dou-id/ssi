@@ -3768,7 +3768,7 @@ _:c14n0 <https://w3id.org/security#verificationMethod> <https://example.org/foo/
         let credential_dataset_normalized =
             urdna2015::normalize(credential_dataset.quads().map(Into::into));
         let credential_urdna2015 = credential_dataset_normalized.into_nquads();
-        // eprintln!("edu credential:\n{}", credential_urdna2015);
+        eprintln!("edu credential:\n{}", credential_urdna2015);
         let verification_result = vc.verify(None, &DIDKey, &mut context_loader).await;
         eprintln!("検証結果の中身:\n{:#?}", verification_result);
         assert!(verification_result.errors.is_empty());
