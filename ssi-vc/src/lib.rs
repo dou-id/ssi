@@ -3770,36 +3770,4 @@ _:c14n0 <https://w3id.org/security#verificationMethod> <https://example.org/foo/
         eprintln!("edu credential:\n{}", credential_urdna2015);
         assert_eq!(true, false);
     }
-
-    #[async_std::test]
-    async fn sakazuki_skill_credential_json() {
-        let credential_str = include_str!("../../examples/sakazuki-skill-vc.jsonld");
-        let vc: Credential = serde_json::from_str(credential_str).unwrap();
-        let mut context_loader = ssi_json_ld::ContextLoader::default();
-        let credential_dataset = vc
-            .to_dataset_for_signing(None, &mut context_loader)
-            .await
-            .unwrap();
-        let credential_dataset_normalized =
-            urdna2015::normalize(credential_dataset.quads().map(Into::into));
-        let credential_urdna2015 = credential_dataset_normalized.into_nquads();
-        eprintln!("skill credential:\n{}", credential_urdna2015);
-        assert_eq!(true, false);
-    }
-
-    #[async_std::test]
-    async fn sakazuki_eiken_credential_json() {
-        let credential_str = include_str!("../../examples/sakazuki-eiken-vc.jsonld");
-        let vc: Credential = serde_json::from_str(credential_str).unwrap();
-        let mut context_loader = ssi_json_ld::ContextLoader::default();
-        let credential_dataset = vc
-            .to_dataset_for_signing(None, &mut context_loader)
-            .await
-            .unwrap();
-        let credential_dataset_normalized =
-            urdna2015::normalize(credential_dataset.quads().map(Into::into));
-        let credential_urdna2015 = credential_dataset_normalized.into_nquads();
-        eprintln!("eiken credential:\n{}", credential_urdna2015);
-        assert_eq!(true, false);
-    }
 }
