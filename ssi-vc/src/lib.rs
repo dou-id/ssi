@@ -1884,6 +1884,7 @@ pub(crate) mod tests {
     use ssi_dids::{example::DIDExample, VerificationMethodMap};
     use ssi_json_ld::urdna2015;
     use ssi_ldp::{ProofSuite, ProofSuiteType};
+    use did_method_key::DIDKey;
 
     #[test]
     fn numeric_date() {
@@ -3767,7 +3768,9 @@ _:c14n0 <https://w3id.org/security#verificationMethod> <https://example.org/foo/
         let credential_dataset_normalized =
             urdna2015::normalize(credential_dataset.quads().map(Into::into));
         let credential_urdna2015 = credential_dataset_normalized.into_nquads();
-        eprintln!("edu credential:\n{}", credential_urdna2015);
-        assert_eq!(true, false);
+        // eprintln!("edu credential:\n{}", credential_urdna2015);
+        let verification_result = vc.verify(None, &DIDExample, &mut context_loader).await;
+        println!("{:#?}", verification_result);
+        assert!(verification_result.errors.is_empty());
     }
 }
