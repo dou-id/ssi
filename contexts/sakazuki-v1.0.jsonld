@@ -108,27 +108,16 @@
       }
     },
     "SkillCredential": {
-      "@id": "https://schema.sakazuki.xyz/credentials#SkillCredential",
+      "@id": "sakazuki:SkillCredential",
       "@context": {
-        "@version": 1.1,
-        "@protected": true,
-        "id": "@id",
-        "type": "@type",
-        "sakazuki": "https://schema.sakazuki.xyz/credentials#",
-        "name": "http://schema.org/name",
-        "description": "http://schema.org/description"
+        "name": "schema:name",
+        "description": "schema:description"
       }
     },
     "SkillCredentialSubject": {
-      "@id": "sakazuki:credentialSubject",
-      "@type": "@id",
+      "@id": "sakazuki:SkillCredentialSubject",
       "@context": {
-        "@version": 1.1,
-        "@protected": true,
-        "id": "@id",
-        "type": "@type",
-        "sakazuki": "https://schema.sakazuki.xyz/credentials#",
-        "name": "http://schema.org/name",
+        "name": "schema:name",
         "skill": {
           "@id": "sakazuki:skill",
           "@type": "@json"
