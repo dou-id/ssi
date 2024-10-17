@@ -1,0 +1,128 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@protected": true,
+    "id": "@id",
+    "type": "@type",
+    "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+    "schema": "http://schema.org/",
+    "name": "schema:name",
+    "description": "schema:description",
+    "CareerCredential": {
+      "@id": "sakazuki:CareerCredential",
+      "@context": {
+        "name": "schema:name",
+        "description": "schema:description"
+      }
+    },
+    "CareerCredentialSubject": {
+      "@id": "sakazuki:CareerCredentialSubject",
+      "@context": {
+        "name": "schema:name",
+        "company": {
+          "@id": "sakazuki:company",
+          "@nest": "company",
+          "@context": {
+            "name": "schema:name",
+            "url": "schema:url",
+            "telephone": "schema:telephone",
+            "location": "schema:location",
+            "country": "schema:addressCountry"
+          }
+        },
+        "startDate": "schema:startDate",
+        "endDate": "schema:endDate",
+        "employmentType": "schema:employmentType",
+        "workFrequency": {
+          "@id": "sakazuki:workFrequency",
+          "@context": {
+            "hours": "schema:value",
+            "unit": "schema:unitText"
+          }
+        },
+        "workLocation": "schema:workLocation",
+        "history": {
+          "@id": "sakazuki:history",
+          "@container": "@list",
+          "@context": {
+            "title": "schema:title",
+            "startDate": "schema:startDate",
+            "endDate": "schema:endDate",
+            "teamStructure": "schema:department",
+            "role": {
+              "@id": "schema:roleName",
+              "@container": "@list"
+            },
+            "language": {
+              "@id": "schema:knowsLanguage",
+              "@container": "@list"
+            },
+            "value": "schema:value",
+            "thanks": "schema:description",
+            "skills": {
+              "@id": "schema:skills",
+              "@container": "@list"
+            }
+          }
+        },
+        "salary": {
+          "@id": "schema:baseSalary",
+          "@context": {
+            "code": "schema:currency",
+            "amount": "schema:value",
+            "unit": "schema:unitText"
+          }
+        },
+        "award": {
+          "@id": "schema:award",
+          "@container": "@list",
+          "@context": {
+            "title": "schema:name",
+            "awardDate": "schema:dateAwarded",
+            "detail": "schema:description",
+            "externalUrl": "schema:url"
+          }
+        }
+      }
+    },
+    "EducationalCredential": {
+      "@id": "sakazuki:EducationalCredential",
+      "@context": {
+        "name": "schema:name",
+        "description": "schema:description"
+      }
+    },
+    "EducationalCredentialSubject": {
+      "@id": "sakazuki:EducationalCredentialSubject",
+      "@context": {
+        "name": "schema:name",
+        "degree": {
+          "@id": "schema:hasCredential",
+          "@context": {
+            "id": "sakazuki:degreeId",
+            "dateEarned": "schema:dateCreated",
+            "degreeOf": "sakazuki:degreeOf",
+            "departmentOf": "schema:department"
+          }
+        }
+      }
+    },
+    "SkillCredential": {
+      "@id": "sakazuki:SkillCredential",
+      "@context": {
+        "name": "schema:name",
+        "description": "schema:description"
+      }
+    },
+    "SkillCredentialSubject": {
+      "@id": "sakazuki:SkillCredentialSubject",
+      "@context": {
+        "name": "schema:name",
+        "skill": {
+          "@id": "sakazuki:skill",
+          "@type": "@json"
+        }
+      }
+    }
+  }
+}

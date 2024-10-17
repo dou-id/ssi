@@ -4,120 +4,264 @@
     "@protected": true,
     "id": "@id",
     "type": "@type",
-    "sakazuki": "https://schema.sakazuki.xyz/credentials#",
-    "schema": "http://schema.org/",
-    "name": "schema:name",
-    "description": "schema:description",
     "CareerCredential": {
-      "@id": "sakazuki:CareerCredential",
+      "@id": "https://schema.sakazuki.xyz/credentials#CareerCredential",
       "@context": {
-        "name": "schema:name",
-        "description": "schema:description"
+        "@version": 1.1,
+        "@protected": true,
+        "id": "@id",
+        "type": "@type",
+        "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+        "name": "http://schema.org/name",
+        "description": "http://schema.org/description"
       }
     },
     "CareerCredentialSubject": {
-      "@id": "sakazuki:CareerCredentialSubject",
+      "@id": "sakazuki:credentialSubject",
+      "@type": "@id",
       "@context": {
-        "name": "schema:name",
+        "@version": 1.1,
+        "@protected": true,
+        "id": "@id",
+        "type": "@type",
+        "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+        "name": "http://schema.org/name",
         "company": {
           "@id": "sakazuki:company",
-          "@nest": "company",
+          "@type": "@id",
           "@context": {
-            "name": "schema:name",
-            "url": "schema:url",
-            "telephone": "schema:telephone",
-            "location": "schema:location",
-            "country": "schema:addressCountry"
+            "@version": 1.1,
+            "@protected": true,
+            "id": "@id",
+            "type": "@type",
+            "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+            "name": "http://schema.org/name",
+            "url": {
+              "@id": "sakazuki:url",
+              "@type": "@id"
+            },
+            "telephone": {
+              "@id": "sakazuki:telephone",
+              "@type": "@id"
+            },
+            "location": {
+              "@id": "sakazuki:location",
+              "@type": "@id"
+            },
+            "country": {
+              "@id": "sakazuki:country",
+              "@type": "@id"
+            }
           }
         },
-        "startDate": "schema:startDate",
-        "endDate": "schema:endDate",
-        "employmentType": "schema:employmentType",
+        "startDate": {
+          "@id": "http://schema.org/startDate",
+          "@type": "@id"
+        },
+        "endDate": {
+          "@id": "http://schema.org/endDate",
+          "@type": "@id"
+        },
+        "employmentType": {
+          "@id": "http://schema.org/employmentType",
+          "@type": "@id"
+        },
         "workFrequency": {
           "@id": "sakazuki:workFrequency",
+          "@type": "@id",
           "@context": {
-            "hours": "schema:value",
-            "unit": "schema:unitText"
+            "@version": 1.1,
+            "@protected": true,
+            "id": "@id",
+            "type": "@type",
+            "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+            "hours": {
+              "@id": "sakazuki:hours",
+              "@type": "@id"
+            },
+            "unit": {
+              "@id": "sakazuki:unit",
+              "@type": "@id"
+            }
           }
         },
-        "workLocation": "schema:workLocation",
+        "workLocation": {
+          "@id": "sakazuki:workLocation",
+          "@type": "@id"
+        },
         "history": {
           "@id": "sakazuki:history",
+          "@type": "@id",
           "@container": "@list",
           "@context": {
-            "title": "schema:title",
-            "startDate": "schema:startDate",
-            "endDate": "schema:endDate",
-            "teamStructure": "schema:department",
+            "@version": 1.1,
+            "@protected": true,
+            "id": "@id",
+            "type": "@type",
+            "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+            "title": {
+              "@id": "http://schema.org/title",
+              "@type": "@id"
+            },
+            "startDate": {
+              "@id": "http://schema.org/startDate",
+              "@type": "@id"
+            },
+            "endDate": {
+              "@id": "http://schema.org/endDate",
+              "@type": "@id"
+            },
+            "teamStructure": {
+              "@id": "sakazuki:teamStructure",
+              "@type": "@id"
+            },
             "role": {
-              "@id": "schema:roleName",
+              "@id": "sakazuki:role",
+              "@type": "@id",
               "@container": "@list"
             },
             "language": {
-              "@id": "schema:knowsLanguage",
+              "@id": "sakazuki:language",
+              "@type": "@id",
               "@container": "@list"
             },
-            "value": "schema:value",
-            "thanks": "schema:description",
+            "value": {
+              "@id": "sakazuki:value",
+              "@type": "@id"
+            },
+            "thanks": {
+              "@id": "sakazuki:thanks",
+              "@type": "@id"
+            },
             "skills": {
-              "@id": "schema:skills",
+              "@id": "sakazuki:skills",
+              "@type": "@id",
               "@container": "@list"
             }
           }
         },
         "salary": {
-          "@id": "schema:baseSalary",
+          "@id": "sakazuki:salary",
+          "@type": "@id",
           "@context": {
-            "code": "schema:currency",
-            "amount": "schema:value",
-            "unit": "schema:unitText"
+            "@version": 1.1,
+            "@protected": true,
+            "id": "@id",
+            "type": "@type",
+            "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+            "code": {
+              "@id": "sakazuki:code",
+              "@type": "@id"
+            },
+            "amount": {
+              "@id": "sakazuki:amount",
+              "@type": "@id"
+            },
+            "unit": {
+              "@id": "sakazuki:unit",
+              "@type": "@id"
+            }
           }
         },
         "award": {
-          "@id": "schema:award",
+          "@id": "sakazuki:award",
+          "@type": "@id",
           "@container": "@list",
           "@context": {
-            "title": "schema:name",
-            "awardDate": "schema:dateAwarded",
-            "detail": "schema:description",
-            "externalUrl": "schema:url"
+            "@version": 1.1,
+            "@protected": true,
+            "id": "@id",
+            "type": "@type",
+            "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+            "title": {
+              "@id": "sakazuki:title",
+              "@type": "@id"
+            },
+            "awardDate": {
+              "@id": "sakazuki:awardDate",
+              "@type": "@id"
+            },
+            "detail": {
+              "@id": "sakazuki:detail",
+              "@type": "@id"
+            },
+            "externalUrl": {
+              "@id": "sakazuki:externalUrl",
+              "@type": "@id"
+            }
           }
         }
       }
     },
     "EducationalCredential": {
-      "@id": "sakazuki:EducationalCredential",
+      "@id": "https://schema.sakazuki.xyz/credentials#EducationalCredential",
       "@context": {
-        "name": "schema:name",
-        "description": "schema:description"
+        "@version": 1.1,
+        "@protected": true,
+        "id": "@id",
+        "type": "@type",
+        "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+        "name": "http://schema.org/name",
+        "description": "http://schema.org/description"
       }
     },
     "EducationalCredentialSubject": {
-      "@id": "sakazuki:EducationalCredentialSubject",
+      "@id": "sakazuki:credentialSubject",
+      "@type": "@id",
       "@context": {
-        "name": "schema:name",
+        "@version": 1.1,
+        "@protected": true,
+        "id": "@id",
+        "type": "@type",
+        "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+        "name": "http://schema.org/name",
         "degree": {
-          "@id": "schema:hasCredential",
+          "@id": "sakazuki:degree",
+          "@type": "@id",
           "@context": {
-            "id": "sakazuki:degreeId",
-            "dateEarned": "schema:dateCreated",
-            "degreeOf": "sakazuki:degreeOf",
-            "departmentOf": "schema:department"
+            "@version": 1.1,
+            "@protected": true,
+            "id": "@id",
+            "type": "@type",
+            "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+            "dateEarned": {
+              "@id": "https://schema.org/Date",
+              "@type": "@id"
+            },
+            "degreeOf": {
+              "@id": "sakazuki:degreeOf",
+              "@type": "@id"
+            },
+            "departmentOf": {
+              "@id": "sakazuki:departmentOf",
+              "@type": "@id"
+            }
           }
         }
       }
     },
     "SkillCredential": {
-      "@id": "sakazuki:SkillCredential",
+      "@id": "https://schema.sakazuki.xyz/credentials#SkillCredential",
       "@context": {
-        "name": "schema:name",
-        "description": "schema:description"
+        "@version": 1.1,
+        "@protected": true,
+        "id": "@id",
+        "type": "@type",
+        "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+        "name": "http://schema.org/name",
+        "description": "http://schema.org/description"
       }
     },
     "SkillCredentialSubject": {
-      "@id": "sakazuki:SkillCredentialSubject",
+      "@id": "sakazuki:credentialSubject",
+      "@type": "@id",
       "@context": {
-        "name": "schema:name",
+        "@version": 1.1,
+        "@protected": true,
+        "id": "@id",
+        "type": "@type",
+        "sakazuki": "https://schema.sakazuki.xyz/credentials#",
+        "name": "http://schema.org/name",
         "skill": {
           "@id": "sakazuki:skill",
           "@type": "@json"
