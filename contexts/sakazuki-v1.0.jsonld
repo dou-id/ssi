@@ -213,7 +213,7 @@
           "@context": {
             "id": "sakazuki:degreeId",
             "dateEarned": "schema:dateCreated",
-            "degreeOf": "schema:credentialCategory",
+            "degreeOf": "sakazuki:degreeOf",
             "departmentOf": "schema:department"
           }
         }
