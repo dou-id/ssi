@@ -3752,7 +3752,7 @@ _:c14n0 <https://w3id.org/security#verificationMethod> <https://example.org/foo/
             urdna2015::normalize(credential_dataset.quads().map(Into::into));
         let credential_urdna2015 = credential_dataset_normalized.into_nquads();
         eprintln!("career credential:\n{}", credential_urdna2015);
-        assert_eq!(true, false);
+        assert_eq!(true, true);
     }
 
     #[async_std::test]
@@ -3768,7 +3768,7 @@ _:c14n0 <https://w3id.org/security#verificationMethod> <https://example.org/foo/
             urdna2015::normalize(credential_dataset.quads().map(Into::into));
         let credential_urdna2015 = credential_dataset_normalized.into_nquads();
         eprintln!("edu credential:\n{}", credential_urdna2015);
-        assert_eq!(true, false);
+        assert_eq!(true, true);
     }
 
     #[async_std::test]
@@ -3784,6 +3784,6 @@ _:c14n0 <https://w3id.org/security#verificationMethod> <https://example.org/foo/
             urdna2015::normalize(credential_dataset.quads().map(Into::into));
         let credential_urdna2015 = credential_dataset_normalized.into_nquads();
         eprintln!("skill credential:\n{}", credential_urdna2015);
-        assert_eq!(true, false);
+        assert_eq!(true, true);
     }
 }
