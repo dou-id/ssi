@@ -1,0 +1,44 @@
+{
+  "id": "urn:uuid:497b54b3-df7c-46ad-894f-387486afec2f",
+  "name": "現状の学歴スキーマでの発行確認",
+  "type": [
+    "VerifiableCredential",
+    "EducationalCredential"
+  ],
+  "proof": {
+    "jws": "eyJhbGciOiJFUzI1NksiLCJjcml0IjpbImI2NCJdLCJiNjQiOmZhbHNlfQ..VaZhPb3SS2bIYHQxYy7Bl5JkaTsrroeKT_ZHXdpWxnhZdvpoMRNqkdHFlM03tAjjuFfnJmBRC-7gFg-iJ3o_MQ",
+    "type": "EcdsaSecp256k1Signature2019",
+    "created": "2024-10-15T04:21:26.177Z",
+    "proofPurpose": "assertionMethod",
+    "verificationMethod": "did:key:zQ3shv1ha5wxEyqL6SEWcV8GzwH6zA3zZhxKG72ydxGvDhV2J#zQ3shv1ha5wxEyqL6SEWcV8GzwH6zA3zZhxKG72ydxGvDhV2J"
+  },
+  "issuer": "did:key:zQ3shv1ha5wxEyqL6SEWcV8GzwH6zA3zZhxKG72ydxGvDhV2J",
+  "@context": [
+    "https://www.w3.org/2018/credentials/v1",
+    "https://w3id.org/vc/status-list/2021/v1",
+    "https://schema.sakazuki.xyz/credentials/v1.0.jsonld"
+  ],
+  "description": "現状の学歴スキーマでの発行確認の説明になります！！！",
+  "issuanceDate": "2024-10-14T00:00:00Z",
+  "credentialSchema": {
+    "id": "https://schema.sakazuki.xyz/credentials/edu/v1.0.json",
+    "type": "JsonSchemaValidator2018"
+  },
+  "credentialStatus": {
+    "id": "https://localhost:3001/api/credential-status-lists/ffhqc2v546u1zkygfag6dxlx#0",
+    "type": "StatusList2021Entry",
+    "statusPurpose": "revocation",
+    "statusListIndex": "0",
+    "statusListCredential": "https://localhost:3001/api/credential-status-lists/ffhqc2v546u1zkygfag6dxlx"
+  },
+  "credentialSubject": {
+    "name": "森田北斗",
+    "type": "EducationalCredentialSubject",
+    "degree": {
+      "id": "11111",
+      "degreeOf": "確認ホゲ大学",
+      "dateEarned": "2024-10-14T00:00:00.000Z",
+      "departmentOf": "工学部"
+    }
+  }
+}

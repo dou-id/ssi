@@ -1,0 +1,87 @@
+{
+  "id": "urn:uuid:aae57254-e0de-4879-a6ef-29828494bdcb",
+  "name": "PitPa Skill Credential",
+  "type": [
+    "VerifiableCredential",
+    "SkillCredential"
+  ],
+  "proof": {
+    "jws": "eyJhbGciOiJFUzI1NksiLCJjcml0IjpbImI2NCJdLCJiNjQiOmZhbHNlfQ..oIM_bTRWZNR_1K-bTSYHbLtguUj0yxEcVRNmwHbnNKoEACBro_laq-hNmnJD3dvpBHKpdeF8GoVDtrdN_quOpg",
+    "type": "EcdsaSecp256k1Signature2019",
+    "created": "2024-10-17T08:23:58.521Z",
+    "proofPurpose": "assertionMethod",
+    "verificationMethod": "did:key:zQ3shv1ha5wxEyqL6SEWcV8GzwH6zA3zZhxKG72ydxGvDhV2J#zQ3shv1ha5wxEyqL6SEWcV8GzwH6zA3zZhxKG72ydxGvDhV2J"
+  },
+  "issuer": "did:key:zQ3shv1ha5wxEyqL6SEWcV8GzwH6zA3zZhxKG72ydxGvDhV2J",
+  "@context": [
+    "https://www.w3.org/2018/credentials/v1",
+    "https://w3id.org/vc/status-list/2021/v1",
+    "https://schema.sakazuki.xyz/credentials/v1.0.jsonld"
+  ],
+  "description": "Skill Credential issued by PitPa",
+  "issuanceDate": "2024-10-17T08:23:58.249Z",
+  "credentialSchema": {
+    "id": "https://schema.sakazuki.xyz/credentials/skill/v1.0.json",
+    "type": "JsonSchemaValidator2018"
+  },
+  "credentialStatus": {
+    "id": "https://localhost:3001/api/skill-credential-status-lists/yfl25vvln7suqhbccr9n6qtm#0",
+    "type": "StatusList2021Entry",
+    "statusPurpose": "revocation",
+    "statusListIndex": "0",
+    "statusListCredential": "https://localhost:3001/api/skill-credential-status-lists/yfl25vvln7suqhbccr9n6qtm"
+  },
+  "credentialSubject": {
+    "type": "SkillCredentialSubject",
+    "skill": {
+      "addInfo": {
+        "howToUse": {
+          "howToUseEn": "howToUseEn",
+          "howToUseJp": "howToUseJp"
+        },
+        "description": {
+          "descriptionEn": "description",
+          "descriptionJp": "説明文"
+        },
+        "faceimageHash": "hogehogehoge",
+        "candoStatement": {
+          "candoStatementEn": "candoStatementEn",
+          "candoStatementJp": "candoStatementJp"
+        }
+      },
+      "personalData": {
+        "name": {
+          "nameEn": "YamadaTaro",
+          "nameJp": "山田太郎",
+          "nameKana": "ヤマダタロウ"
+        },
+        "birthDate": "20001231",
+        "profileId": "10000003444",
+        "personalNo": "20B12345"
+      },
+      "examinationResult": {
+        "readingCefr": "A2",
+        "totalResult": "合格",
+        "writingCefr": "B1",
+        "speakingCefr": "B1",
+        "cseTotalScore": "2000",
+        "listeningCefr": "A2",
+        "totalCefrScore": "B1",
+        "readingCseScore": "500",
+        "writingCseScore": "500",
+        "firstStageResult": "一次合格",
+        "speakingCseScore": "500",
+        "listeningCseScore": "500",
+        "secondStageResult": "二次合格",
+        "eikenBandFirstStage": "G2+2",
+        "eikenBandSecondStage": "G2+2"
+      },
+      "examinationInformation": {
+        "term": "2023年度2回次",
+        "grade": "20",
+        "testDate": "20231001",
+        "recognitionDate": "20231101"
+      }
+    }
+  }
+}
