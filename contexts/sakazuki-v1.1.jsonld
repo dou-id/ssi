@@ -21,7 +21,6 @@
         "name": "schema:name",
         "company": {
           "@id": "sakazuki:company",
-          "@nest": "company",
           "@context": {
             "name": "schema:name",
             "url": "schema:url",
@@ -78,7 +77,7 @@
           "@container": "@list",
           "@context": {
             "title": "schema:name",
-            "awardDate": "schema:dateAwarded",
+            "awardDate": "schema:dateCreated",
             "detail": "schema:description",
             "externalUrl": "schema:url"
           }
@@ -97,11 +96,11 @@
       "@context": {
         "name": "schema:name",
         "degree": {
-          "@id": "schema:hasCredential",
+          "@id": "sakazuki:degree",
           "@context": {
             "id": "sakazuki:degreeId",
             "dateEarned": "schema:dateCreated",
-            "degreeOf": "sakazuki:degreeOf",
+            "degreeOf": "schema:credentialCategory",
             "departmentOf": "schema:department"
           }
         }
