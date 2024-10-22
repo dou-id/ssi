@@ -1,38 +1,38 @@
 {
-  "id": "urn:uuid:47cc0529-5b5c-4032-87e8-ed926131365e",
-  "name": "PitPa Career Credential",
+  "id": "urn:uuid:b3a75e4e-5ab1-4eb2-bc92-ec76a63d4587",
+  "name": "sakazuki sample Career Credential",
   "type": [
     "VerifiableCredential",
     "CareerCredential"
   ],
   "proof": {
-    "jws": "eyJhbGciOiJFUzI1NksiLCJjcml0IjpbImI2NCJdLCJiNjQiOmZhbHNlfQ..rYGpT5FJZ8keeOh58XmRsVlYXrn5hDSiI14CKcg3OsVD_ehp7gLZWWj1GWpaeuryDEzm4UuGup2DjoXq9XURAA",
+    "jws": "eyJhbGciOiJFUzI1NksiLCJjcml0IjpbImI2NCJdLCJiNjQiOmZhbHNlfQ..hsjEEKBsR7IuJZi47XkF_3UnJjPFTLvgIbU_IbxsbpUCUo7ZBp6KWZI8dOYbgIwQDJuIdpu1lhtmdtzf-jxCkQ",
     "type": "EcdsaSecp256k1Signature2019",
-    "created": "2024-10-15T04:55:56.707Z",
+    "created": "2024-10-22T11:08:49.144Z",
     "proofPurpose": "assertionMethod",
-    "verificationMethod": "did:key:zQ3shv1ha5wxEyqL6SEWcV8GzwH6zA3zZhxKG72ydxGvDhV2J#zQ3shv1ha5wxEyqL6SEWcV8GzwH6zA3zZhxKG72ydxGvDhV2J"
+    "verificationMethod": "did:key:zQ3shv5hDs4524gwcWPK9eW1E4NbyX8DeU9R3xyQ3LCrNm9na#zQ3shv5hDs4524gwcWPK9eW1E4NbyX8DeU9R3xyQ3LCrNm9na"
   },
-  "issuer": "did:key:zQ3shv1ha5wxEyqL6SEWcV8GzwH6zA3zZhxKG72ydxGvDhV2J",
+  "issuer": "did:key:zQ3shv5hDs4524gwcWPK9eW1E4NbyX8DeU9R3xyQ3LCrNm9na",
   "@context": [
     "https://www.w3.org/2018/credentials/v1",
     "https://w3id.org/vc/status-list/2021/v1",
     "https://schema.sakazuki.xyz/credentials/v1.0.jsonld"
   ],
-  "description": "PitPa Career Credential is an official",
-  "issuanceDate": "2024-10-15T04:53:56.540Z",
+  "description": "sakazuki sample Career Credential is an official",
+  "issuanceDate": "2024-10-22T11:07:18.243Z",
   "credentialSchema": {
     "id": "https://schema.sakazuki.xyz/credentials/career/v1.0.json",
     "type": "JsonSchemaValidator2018"
   },
   "credentialStatus": {
-    "id": "https://localhost:3001/api/career-credential-status-lists/uhs2yvmtqduw4stmbhbgct59#8",
+    "id": "https://localhost:3001/api/career-credential-status-lists/kmr3kwbcgixo9ax7u6dmb3i6#0",
     "type": "StatusList2021Entry",
     "statusPurpose": "revocation",
-    "statusListIndex": "8",
-    "statusListCredential": "https://localhost:3001/api/career-credential-status-lists/uhs2yvmtqduw4stmbhbgct59"
+    "statusListIndex": "0",
+    "statusListCredential": "https://localhost:3001/api/career-credential-status-lists/kmr3kwbcgixo9ax7u6dmb3i6"
   },
   "credentialSubject": {
-    "name": "森田フィードバック",
+    "name": "sakazuki taro",
     "type": "CareerCredentialSubject",
     "award": [
       {
@@ -42,24 +42,13 @@
       }
     ],
     "company": {
-      "name": "PitPa"
+      "name": "sakazuki sample"
     },
     "history": [
       {
-        "role": [],
-        "title": "メール通知確認ヒストリー",
-        "value": "プロジェクト型証明書hoge\n\nプロジェクト型証明書hoge\n\nプロジェクト型証明書hoge",
-        "skills": [],
-        "thanks": "プロジェクト型証明書hoge",
-        "endDate": "",
-        "language": [],
-        "startDate": "2024-08-01",
-        "teamStructure": "プロジェクト型証明書hoge"
-      },
-      {
         "role": [
           "リーダー",
-          "リーダー2"
+          "デザイナー"
         ],
         "title": "現状の職歴スキーマでの発行確認",
         "value": "現状の職歴スキーマでの発行確認の概要\n\n現状の職歴スキーマでの発行確認の業務内容\n\n現状の職歴スキーマでの発行確認の成果",
@@ -68,16 +57,16 @@
           "Ruby"
         ],
         "thanks": "現状の職歴スキーマでの発行確認の評価フィードバック",
-        "endDate": "2024-10-14",
+        "endDate": "2024-10-21",
         "language": [
           "日本語",
-          "ジンバブエ語"
+          "フランス語"
         ],
         "startDate": "2024-10-01",
         "teamStructure": "5人"
       }
     ],
-    "startDate": "2024-07-01T00:00:00.000Z",
+    "startDate": "2024-10-01T00:00:00.000Z",
     "employmentType": "full-time"
   }
 }
