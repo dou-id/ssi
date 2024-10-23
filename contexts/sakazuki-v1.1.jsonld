@@ -5,7 +5,7 @@
     "id": "@id",
     "type": "@type",
     "sakazuki": "https://schema.sakazuki.xyz/credentials#",
-    "schema": "http://schema.org/",
+    "schema": "https://schema.org/",
     "name": "schema:name",
     "description": "schema:description",
     "CareerCredential": {
