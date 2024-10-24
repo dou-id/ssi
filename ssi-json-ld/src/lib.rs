@@ -77,6 +77,8 @@ pub const JFF_VC_EDU_PLUGFEST_2022_2_CONTEXT: Iri =
     iri!("https://purl.imsglobal.org/spec/ob/v3p0/context.json");
 pub const SAKAZUKI_V1_0_CONTEXT: Iri =
     iri!("https://schema.sakazuki.xyz/credentials/v1.0.jsonld");
+pub const SAKAZUKI_V1_1_CONTEXT: Iri =
+    iri!("https://schema.sakazuki.xyz/credentials/v1.1.jsonld");
 pub const MORITA_SANDBOX_SAKAZUKI_V1_0_CONTEXT: Iri =
     iri!("https://morita.sandbox.sakazuki.xyz/credentials/v1.0.jsonld");
 pub const EIKEN_V1_0_CONTEXT: Iri =
@@ -228,6 +230,10 @@ lazy_static::lazy_static! {
         SAKAZUKI_V1_0_CONTEXT,
         ssi_contexts::SAKAZUKI_V1_0
     );
+    pub static ref SAKAZUKI_V1_1_CONTEXT_DOCUMENT: RemoteDocument = load_static_context(
+        SAKAZUKI_V1_1_CONTEXT,
+        ssi_contexts::SAKAZUKI_V1_1
+    );
     pub static ref MORITA_SANDBOX_SAKAZUKI_V1_0_CONTEXT_DOCUMENT: RemoteDocument = load_static_context(
         MORITA_SANDBOX_SAKAZUKI_V1_0_CONTEXT,
         ssi_contexts::SAKAZUKI_V1_0
@@ -324,6 +330,9 @@ impl Loader<IriBuf, Span> for StaticLoader {
                     },
                     SAKAZUKI_V1_0_CONTEXT => {
                         Ok(SAKAZUKI_V1_0_CONTEXT_DOCUMENT.clone())
+                    },
+                    SAKAZUKI_V1_1_CONTEXT => {
+                        Ok(SAKAZUKI_V1_1_CONTEXT_DOCUMENT.clone())
                     },
                     MORITA_SANDBOX_SAKAZUKI_V1_0_CONTEXT => {
                         Ok(MORITA_SANDBOX_SAKAZUKI_V1_0_CONTEXT_DOCUMENT.clone())
