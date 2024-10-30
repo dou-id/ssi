@@ -670,6 +670,7 @@ impl Credential {
             checks,
             eip712_domain,
             type_,
+            cryptosuite,
         } = options;
         if checks.is_some() {
             return Err(Error::UnencodableOptionClaim("checks".to_string()));
