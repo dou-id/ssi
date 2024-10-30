@@ -8,8 +8,9 @@ mod cacao;
 pub mod revocation;
 
 use cacao::BindingDelegation;
+use serde_with::{formats::PreferMany, serde_as, OneOrMany as SerdeWithOneOrMany};
 pub use ssi_core::{one_or_many::OneOrMany, uri::URI};
-use ssi_dids::did_resolve::DIDResolver;
+use ssi_dids::did_resolve::{resolve_key, DIDResolver};
 pub use ssi_dids::VerificationRelationship as ProofPurpose;
 use ssi_json_ld::parse_ld_context;
 use ssi_json_ld::{json_to_dataset, rdf::DataSet, ContextLoader};
@@ -44,11 +45,13 @@ use serde_json::Value;
 // - Support more LD-proof types
 
 pub const DEFAULT_CONTEXT: &str = "https://www.w3.org/2018/credentials/v1";
+pub const DEFAULT_CONTEXT_V2: &str = "https://www.w3.org/ns/credentials/v2";
 
 // work around https://github.com/w3c/vc-test-suite/issues/103
 pub const ALT_DEFAULT_CONTEXT: &str = "https://w3.org/2018/credentials/v1";
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde_as]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Credential {
     #[serde(rename = "@context")]
@@ -72,6 +75,7 @@ pub struct Credential {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub credential_status: Option<Status>,
     #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde_as(deserialize_as = "Option<SerdeWithOneOrMany<_, PreferMany>>")]
     pub terms_of_use: Option<Vec<TermsOfUse>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub evidence: Option<OneOrMany<Evidence>>,
@@ -87,7 +91,7 @@ pub struct Credential {
 /// RFC3339 date-time as used in VC Data Model
 /// <https://www.w3.org/TR/vc-data-model/#issuance-date>
 /// <https://www.w3.org/TR/vc-data-model/#expiration>
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 #[serde(try_from = "String")]
 #[serde(into = "String")]
@@ -98,7 +102,7 @@ pub struct VCDateTime {
     use_z: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(untagged)]
 #[serde(try_from = "OneOrMany<Context>")]
 pub enum Contexts {
@@ -106,7 +110,7 @@ pub enum Contexts {
     Many(Vec<Context>),
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CredentialSubject {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -132,7 +136,7 @@ impl CredentialSubject {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(untagged)]
 pub enum Issuer {
     URI(URI),
@@ -155,7 +159,7 @@ impl Issuer {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct ObjectWithId {
     pub id: URI,
@@ -164,7 +168,7 @@ pub struct ObjectWithId {
     pub property_set: Option<Map<String, Value>>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct TermsOfUse {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -175,7 +179,7 @@ pub struct TermsOfUse {
     pub property_set: Option<Map<String, Value>>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Evidence {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -186,7 +190,7 @@ pub struct Evidence {
     pub property_set: Option<Map<String, Value>>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Status {
     pub id: URI,
@@ -215,7 +219,7 @@ pub trait CredentialStatus: Sync {
     ) -> VerificationResult;
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Schema {
     pub id: URI,
@@ -225,7 +229,7 @@ pub struct Schema {
     pub property_set: Option<Map<String, Value>>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct RefreshService {
     pub id: URI,
@@ -235,7 +239,7 @@ pub struct RefreshService {
     pub property_set: Option<Map<String, Value>>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct Presentation {
     #[serde(rename = "@context")]
@@ -260,7 +264,7 @@ pub struct Presentation {
     pub property_set: Option<Map<String, Value>>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(tag = "type")]
 pub enum HolderBinding {
     #[cfg(test)]
@@ -275,7 +279,7 @@ pub enum HolderBinding {
     Unknown,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum CredentialOrJWT {
@@ -336,7 +340,8 @@ impl TryFrom<OneOrMany<Context>> for Contexts {
             Some(Context::URI(URI::String(uri))) => uri,
             Some(Context::Object(_)) => return Err(LdpError::InvalidContext),
         };
-        if first_uri != DEFAULT_CONTEXT && first_uri != ALT_DEFAULT_CONTEXT {
+        if ![DEFAULT_CONTEXT, DEFAULT_CONTEXT_V2, ALT_DEFAULT_CONTEXT].contains(&first_uri.as_str())
+        {
             return Err(LdpError::InvalidContext);
         }
         Ok(match context {
@@ -471,7 +476,7 @@ pub fn base64_encode_json<T: Serialize>(object: &T) -> Result<String, Error> {
     Ok(base64::encode_config(json, base64::URL_SAFE_NO_PAD))
 }
 
-// deprecated in favor of Credential::generate_jwt and Presentation::generate_jwt
+#[deprecated = "deprecated in favor of Credential::generate_jwt and Presentation::generate_jwt"]
 fn jwt_encode(claims: &JWTClaims, keys: &JWTKeys) -> Result<String, Error> {
     let jwk: &JWK = if let Some(rs256_key) = &keys.rs256_private_key {
         rs256_key
@@ -638,6 +643,7 @@ impl Credential {
         Ok(ssi_jwt::encode_unsigned(&claims)?)
     }
 
+    #[allow(deprecated)]
     #[deprecated(note = "Use generate_jwt")]
     pub fn encode_sign_jwt(&self, keys: &JWTKeys, aud: &str) -> Result<String, Error> {
         let claims = JWTClaims {
@@ -725,6 +731,7 @@ impl Credential {
             checks,
             eip712_domain,
             type_,
+            cryptosuite,
         } = options;
         if checks.is_some() {
             return Err(Error::UnencodableOptionClaim("checks".to_string()));
@@ -737,6 +744,9 @@ impl Credential {
         }
         if type_.is_some() {
             return Err(Error::UnencodableOptionClaim("type".to_string()));
+        }
+        if cryptosuite.is_some() {
+            return Err(Error::UnencodableOptionClaim("cryptosuite".to_string()));
         }
         match proof_purpose {
             None => (),
@@ -754,6 +764,11 @@ impl Credential {
         let algorithm = if let Some(jwk) = jwk {
             jwk.get_algorithm()
                 .ok_or(Error::LDP(LdpError::MissingAlgorithm))?
+        } else if let Some(ref vm) = verification_method {
+            resolve_key(&vm.to_string(), resolver)
+                .await?
+                .get_algorithm()
+                .unwrap_or_default()
         } else {
             ssi_jwk::Algorithm::None
         };
@@ -811,7 +826,7 @@ impl Credential {
             Err(err) => {
                 return (
                     None,
-                    VerificationResult::error(&format!("Unable to split JWS: {}", err)),
+                    VerificationResult::error(&format!("Unable to split JWS: {err}")),
                 );
             }
         };
@@ -825,7 +840,7 @@ impl Credential {
             Err(err) => {
                 return (
                     None,
-                    VerificationResult::error(&format!("Unable to decode JWS: {}", err)),
+                    VerificationResult::error(&format!("Unable to decode JWS: {err}")),
                 );
             }
         };
@@ -834,7 +849,7 @@ impl Credential {
             Err(err) => {
                 return (
                     None,
-                    VerificationResult::error(&format!("Unable to decode JWS claims: {}", err)),
+                    VerificationResult::error(&format!("Unable to decode JWS claims: {err}")),
                 );
             }
         };
@@ -844,8 +859,7 @@ impl Credential {
                 return (
                     None,
                     VerificationResult::error(&format!(
-                        "Unable to convert JWT claims to VC: {}",
-                        err
+                        "Unable to convert JWT claims to VC: {err}"
                     )),
                 );
             }
@@ -853,7 +867,7 @@ impl Credential {
         if let Err(err) = vc.validate_unsigned() {
             return (
                 None,
-                VerificationResult::error(&format!("Invalid VC: {}", err)),
+                VerificationResult::error(&format!("Invalid VC: {err}")),
             );
         }
         // TODO: error if any unconvertable claims
@@ -866,7 +880,7 @@ impl Credential {
             Err(err) => {
                 return (
                     None,
-                    VerificationResult::error(&format!("Unable to filter proofs: {}", err)),
+                    VerificationResult::error(&format!("Unable to filter proofs: {err}")),
                 );
             }
         };
@@ -881,7 +895,7 @@ impl Credential {
             Err(err) => {
                 return (
                     None,
-                    VerificationResult::error(&format!("Unable to resolve key for JWS: {}", err)),
+                    VerificationResult::error(&format!("Unable to resolve key for JWS: {err}")),
                 );
             }
         };
@@ -895,7 +909,7 @@ impl Credential {
                 }
                 Err(err) => results
                     .errors
-                    .push(format!("Unable to filter proofs: {}", err)),
+                    .push(format!("Unable to verify signature: {err}")),
             }
             return (Some(vc), results);
         }
@@ -1038,7 +1052,7 @@ impl Credential {
         let (proofs, _) = match self.filter_proofs(options, None, resolver).await {
             Ok(proofs) => proofs,
             Err(err) => {
-                return VerificationResult::error(&format!("Unable to filter proofs: {}", err));
+                return VerificationResult::error(&format!("Unable to filter proofs: {err}"));
             }
         };
         if proofs.is_empty() {
@@ -1113,18 +1127,14 @@ impl Credential {
             Ok(status) => status,
             Err(e) => {
                 return VerificationResult::error(&format!(
-                    "Unable to convert credentialStatus: {}",
-                    e
+                    "Unable to convert credentialStatus: {e}"
                 ))
             }
         };
         let checkable_status: CheckableStatus = match serde_json::from_value(status_value) {
             Ok(checkable_status) => checkable_status,
             Err(e) => {
-                return VerificationResult::error(&format!(
-                    "Unable to parse credentialStatus: {}",
-                    e
-                ))
+                return VerificationResult::error(&format!("Unable to parse credentialStatus: {e}"))
             }
         };
         let mut result = checkable_status.check(self, resolver, context_loader).await;
@@ -1237,6 +1247,7 @@ impl Presentation {
         })
     }
 
+    #[allow(deprecated)]
     #[deprecated(note = "Use generate_jwt")]
     pub fn encode_sign_jwt(&self, keys: &JWTKeys, aud: &str) -> Result<String, Error> {
         let claims = JWTClaims {
@@ -1269,6 +1280,7 @@ impl Presentation {
             checks,
             eip712_domain,
             type_,
+            cryptosuite,
         } = options;
         if checks.is_some() {
             return Err(Error::UnencodableOptionClaim("checks".to_string()));
@@ -1281,6 +1293,9 @@ impl Presentation {
         }
         if type_.is_some() {
             return Err(Error::UnencodableOptionClaim("type".to_string()));
+        }
+        if cryptosuite.is_some() {
+            return Err(Error::UnencodableOptionClaim("cryptosuite".to_string()));
         }
         match proof_purpose {
             None => (),
@@ -1298,6 +1313,11 @@ impl Presentation {
         let algorithm = if let Some(jwk) = jwk {
             jwk.get_algorithm()
                 .ok_or(Error::LDP(LdpError::MissingAlgorithm))?
+        } else if let Some(ref vm) = verification_method {
+            resolve_key(&vm.to_string(), resolver)
+                .await?
+                .get_algorithm()
+                .unwrap_or_default()
         } else {
             ssi_jwk::Algorithm::None
         };
@@ -1355,7 +1375,7 @@ impl Presentation {
             Err(err) => {
                 return (
                     None,
-                    VerificationResult::error(&format!("Unable to split JWS: {}", err)),
+                    VerificationResult::error(&format!("Unable to split JWS: {err}")),
                 );
             }
         };
@@ -1369,7 +1389,7 @@ impl Presentation {
             Err(err) => {
                 return (
                     None,
-                    VerificationResult::error(&format!("Unable to decode JWS: {}", err)),
+                    VerificationResult::error(&format!("Unable to decode JWS: {err}")),
                 );
             }
         };
@@ -1378,7 +1398,7 @@ impl Presentation {
             Err(err) => {
                 return (
                     None,
-                    VerificationResult::error(&format!("Unable to decode JWS claims: {}", err)),
+                    VerificationResult::error(&format!("Unable to decode JWS claims: {err}")),
                 );
             }
         };
@@ -1388,8 +1408,7 @@ impl Presentation {
                 return (
                     None,
                     VerificationResult::error(&format!(
-                        "Unable to convert JWT claims to VP: {}",
-                        err
+                        "Unable to convert JWT claims to VP: {err}"
                     )),
                 );
             }
@@ -1397,7 +1416,7 @@ impl Presentation {
         if let Err(err) = vp.validate_unsigned() {
             return (
                 None,
-                VerificationResult::error(&format!("Invalid VP: {}", err)),
+                VerificationResult::error(&format!("Invalid VP: {err}")),
             );
         }
         let mut results = VerificationResult::new();
@@ -1411,7 +1430,7 @@ impl Presentation {
             Err(err) => {
                 return (
                     None,
-                    VerificationResult::error(&format!("Unable to filter proofs: {}", err)),
+                    VerificationResult::error(&format!("Unable to filter proofs: {err}")),
                 );
             }
         };
@@ -1426,7 +1445,7 @@ impl Presentation {
             Err(err) => {
                 return (
                     None,
-                    VerificationResult::error(&format!("Unable to resolve key for JWS: {}", err)),
+                    VerificationResult::error(&format!("Unable to resolve key for JWS: {err}")),
                 );
             }
         };
@@ -1439,7 +1458,7 @@ impl Presentation {
                 }
                 Err(err) => results
                     .errors
-                    .push(format!("Unable to filter proofs: {}", err)),
+                    .push(format!("Unable to filter proofs: {err}")),
             }
             return (Some(vp), results);
         }
@@ -1616,7 +1635,7 @@ impl Presentation {
         let (proofs, _) = match self.filter_proofs(options, None, resolver).await {
             Ok(proofs) => proofs,
             Err(err) => {
-                return VerificationResult::error(&format!("Unable to filter proofs: {}", err));
+                return VerificationResult::error(&format!("Unable to filter proofs: {err}"));
             }
         };
         if proofs.is_empty() {
@@ -1880,9 +1899,11 @@ pub(crate) mod tests {
     use super::*;
     use chrono::Duration;
     use serde_json::json;
-    use ssi_dids::did_resolve::DereferencingInputMetadata;
-    use ssi_dids::{example::DIDExample, VerificationMethodMap};
+    use ssi_dids::{
+        did_resolve::DereferencingInputMetadata, example::DIDExample, VerificationMethodMap,
+    };
     use ssi_json_ld::urdna2015;
+    use ssi_jws::sign_bytes_b64;
     use ssi_ldp::{ProofSuite, ProofSuiteType};
 
     #[test]
@@ -2195,6 +2216,57 @@ pub(crate) mod tests {
         .await;
         println!("{:#?}", verification_result);
         assert!(verification_result.errors.is_empty());
+    }
+
+    #[async_std::test]
+    async fn generate_unsigned_jwt() {
+        let key: JWK = serde_json::from_str(JWK_JSON).unwrap();
+        let vc_str = r###"{
+            "@context": [
+                "https://www.w3.org/2018/credentials/v1",
+                "https://www.w3.org/2018/credentials/examples/v1"
+            ],
+            "id": "http://example.org/credentials/192783",
+            "type": "VerifiableCredential",
+            "issuer": "did:example:foo",
+            "issuanceDate": "2020-08-25T11:26:53Z",
+            "credentialSubject": {
+                "id": "did:example:a6c78986cc36418b95a22d7f736",
+                "spouse": "Example Person"
+            }
+        }"###;
+        let vc = Credential {
+            expiration_date: Some(VCDateTime::from(Utc::now() + chrono::Duration::weeks(1))),
+            ..serde_json::from_str(vc_str).unwrap()
+        };
+        let aud = "did:example:90336644520443d28ba78beb949".to_string();
+        let options = LinkedDataProofOptions {
+            domain: Some(aud),
+            checks: None,
+            created: None,
+            verification_method: Some(URI::String("did:example:foo#key1".to_string())),
+            ..Default::default()
+        };
+        let unsigned_jwt_vc = vc.generate_jwt(None, &options, &DIDExample).await.unwrap();
+        let signature = sign_bytes_b64(
+            key.get_algorithm().unwrap(),
+            unsigned_jwt_vc.trim_end_matches('.').as_bytes(),
+            &key,
+        )
+        .unwrap();
+        let signed_jwt = [unsigned_jwt_vc, signature].join("");
+
+        let mut context_loader = ssi_json_ld::ContextLoader::default();
+        let (vc1_opt, verification_result) = Credential::decode_verify_jwt(
+            &signed_jwt,
+            Some(options.clone()),
+            &DIDExample,
+            &mut context_loader,
+        )
+        .await;
+        assert_eq!(vec![String::new(); 0], verification_result.errors);
+        let vc1 = vc1_opt.unwrap();
+        assert_eq!(vc.id, vc1.id);
     }
 
     #[async_std::test]
@@ -2827,6 +2899,51 @@ _:c14n0 <https://w3id.org/security#verificationMethod> <https://example.org/foo/
     }
 
     #[async_std::test]
+    async fn interop_jwt_vc() {
+        use time::{
+            ext::NumericalDuration, format_description::well_known::Rfc3339, OffsetDateTime,
+        };
+        let vc = json!({
+            "@context": "https://www.w3.org/2018/credentials/v1",
+            "id": "http://example.org/credentials/3731",
+            "type": ["VerifiableCredential"],
+            "issuer": "did:example:placeholder",
+            "issuanceDate": "2020-08-19T21:41:50Z",
+            "expirationDate": (OffsetDateTime::now_utc() + (52*10).weeks()).replace_nanosecond(0).unwrap().format(&Rfc3339).unwrap(),
+            "credentialSubject": {
+                "id": "did:example:d23dd687a7dc6787646f2eb98d0"
+            }
+        });
+        let mut vc: Credential = serde_json::from_value(vc).unwrap();
+        let key: JWK = serde_json::from_str(JWK_JSON).unwrap();
+        let mut vc_issue_options = LinkedDataProofOptions::default();
+        let vc_issuer_key = "did:example:foo".to_string();
+        let vc_issuer_vm = "did:example:foo#key1".to_string();
+        vc.issuer = Some(Issuer::URI(URI::String(vc_issuer_key.to_string())));
+        vc_issue_options.verification_method = Some(URI::String(vc_issuer_vm));
+        vc_issue_options.proof_purpose = Some(ProofPurpose::AssertionMethod);
+        vc_issue_options.checks = None;
+        vc_issue_options.created = None;
+        let vc_jwt = vc
+            .generate_jwt(Some(&key), &vc_issue_options, &DIDExample)
+            .await
+            .unwrap();
+        let verifier = josekit::jws::PS256
+            .verifier_from_jwk(&josekit::jwk::Jwk::from_bytes(JWK_JSON).unwrap())
+            .unwrap();
+        josekit::jwt::decode_with_verifier(vc_jwt, &verifier).unwrap();
+    }
+
+    #[async_std::test]
+    async fn verify_old_jwt_vc_decimal_timestamp() {
+        let vc_jwt = "eyJhbGciOiJQUzI1NiIsImtpZCI6ImRpZDpleGFtcGxlOmZvbyNrZXkxIn0.eyJleHAiOjE5OTUyNjczOTcuMTI1ODg4LCJpc3MiOiJkaWQ6ZXhhbXBsZTpmb28iLCJuYmYiOjE1OTc4NzMzMTAuMCwianRpIjoiaHR0cDovL2V4YW1wbGUub3JnL2NyZWRlbnRpYWxzLzM3MzEiLCJzdWIiOiJkaWQ6ZXhhbXBsZTpkMjNkZDY4N2E3ZGM2Nzg3NjQ2ZjJlYjk4ZDAiLCJ2YyI6eyJAY29udGV4dCI6Imh0dHBzOi8vd3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL3YxIiwiaWQiOiJodHRwOi8vZXhhbXBsZS5vcmcvY3JlZGVudGlhbHMvMzczMSIsInR5cGUiOlsiVmVyaWZpYWJsZUNyZWRlbnRpYWwiXSwiY3JlZGVudGlhbFN1YmplY3QiOnsiaWQiOiJkaWQ6ZXhhbXBsZTpkMjNkZDY4N2E3ZGM2Nzg3NjQ2ZjJlYjk4ZDAifSwiaXNzdWVyIjoiZGlkOmV4YW1wbGU6Zm9vIiwiaXNzdWFuY2VEYXRlIjoiMjAyMC0wOC0xOVQyMTo0MTo1MFoiLCJleHBpcmF0aW9uRGF0ZSI6IjIwMzMtMDMtMjRUMDg6NTY6MzcuMTI1ODg4WiJ9fQ.qCOIRr090plGC2SYQeTMuasErurjGeCbHNjkfospByWHxadk-8oz6P6beH03Adafu0I-7xrpEIxmC-KfHynAuEBCpjHMYh0rY2nGHX1sH530DE9O1FOK2IXtvScPKLzCv6v25qIUydzJZY9MnuoO879iowDgMgSAkDzjl8ZXnKpG3_dvoATrVpjP4FeC5m2JVJTMnOIKfehy9ZeFzilb9VcGmprWGWB_e2BJJ_wnLfxorVbGmS7QvTsARuUn_jPxrq_JPf9UZqwGb_wMwN7KG1VJRBuGix9ltf-KNwXI-Qm-9ZabYHub9n0Q3AHTDO78Lr4Or1PuiGq-QNQLtSVb5Q";
+        let mut context_loader = ssi_json_ld::ContextLoader::default();
+        let vc_verification_result =
+            Credential::verify_jwt(vc_jwt, None, &DIDExample, &mut context_loader).await;
+        assert!(vc_verification_result.errors.is_empty());
+    }
+
+    #[async_std::test]
     async fn presentation_from_credential_issue_verify() {
         let vc_str = r###"{
             "@context": "https://www.w3.org/2018/credentials/v1",
@@ -2945,7 +3062,6 @@ _:c14n0 <https://w3id.org/security#verificationMethod> <https://example.org/foo/
             .await
             .unwrap();
         let vp_jwt_verify_options = LinkedDataProofOptions {
-            created: None,
             checks: None,
             proof_purpose: None,
             ..Default::default()
@@ -3513,6 +3629,7 @@ _:c14n0 <https://w3id.org/security#verificationMethod> <https://example.org/foo/
 
     #[async_std::test]
     async fn verify_typed_data() {
+        use sha3::Digest;
         use ssi_ldp::eip712::TypedData;
         let proof: Proof = serde_json::from_value(json!({
           "verificationMethod": "did:example:aaaabbbb#issuerKey-1",
@@ -3715,13 +3832,14 @@ _:c14n0 <https://w3id.org/security#verificationMethod> <https://example.org/foo/
             ssi_jwk::Params::EC(ec) => ec,
             _ => unreachable!(),
         };
-        use k256::ecdsa::signature::Signer;
         let secret_key = k256::SecretKey::try_from(ec_params).unwrap();
         let signing_key = k256::ecdsa::SigningKey::from(secret_key);
-        let sig: k256::ecdsa::recoverable::Signature = signing_key.try_sign(&bytes).unwrap();
-        let sig_bytes = &mut sig.as_ref().to_vec();
+        let (sig, rec_id) = signing_key
+            .sign_digest_recoverable(sha3::Keccak256::new_with_prefix(bytes))
+            .unwrap();
+        let sig_bytes = &mut sig.to_vec();
         // Recovery ID starts at 27 instead of 0.
-        sig_bytes[64] += 27;
+        sig_bytes.push(rec_id.to_byte() + 27);
         let sig_hex = ssi_crypto::hashes::keccak::bytes_to_lowerhex(sig_bytes);
         let mut proof = proof.clone();
         proof.proof_value = Some(sig_hex.clone());

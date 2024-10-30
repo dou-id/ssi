@@ -1,5 +1,5 @@
 use serde::de::DeserializeOwned;
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize, Serializer};
 
 use chrono::{prelude::*, Duration, LocalResult};
 use ssi_jwk::{Algorithm, JWK};
@@ -53,7 +53,21 @@ pub fn decode_unverified<Claims: DeserializeOwned>(jwt: &str) -> Result<Claims, 
 /// which is centered around the Unix epoch start date Jan 1, 1970, 00:00:00 UTC, giving
 /// the years 1685 to 2255.
 #[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, PartialOrd)]
-pub struct NumericDate(f64);
+pub struct NumericDate(#[serde(serialize_with = "interop_serialize")] f64);
+
+/// As many JWT libraries only accept integers, this serializer aims for a
+/// middle ground by serializing a date as an integer if it does not have
+/// fractional seconds. Otherwise a trailing `.0` is always present.
+fn interop_serialize<S>(x: &f64, s: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    if x.fract() != 0.0 {
+        s.serialize_f64(*x)
+    } else {
+        s.serialize_i64(*x as i64)
+    }
+}
 
 #[derive(thiserror::Error, Debug)]
 pub enum NumericDateConversionError {
@@ -124,7 +138,11 @@ impl TryFrom<DateTime<Utc>> for NumericDate {
         // Have to take seconds and nanoseconds separately in order to get the full allowable
         // range of microsecond-precision values as described above.
         let whole_seconds = dtu.timestamp() as f64;
-        let fractional_seconds = dtu.timestamp_nanos().rem_euclid(1_000_000_000) as f64 * 1.0e-9;
+        let fractional_seconds = dtu
+            .timestamp_nanos_opt()
+            .expect("value can not be represented in a timestamp with nanosecond precision.")
+            .rem_euclid(1_000_000_000) as f64
+            * 1.0e-9;
         Self::try_from_seconds(whole_seconds + fractional_seconds)
     }
 }
