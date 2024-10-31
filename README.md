@@ -260,7 +260,7 @@ $ cargo test --workspace
 ### Crates.io
 
 ```
-ssi = "0.4"
+ssi = "0.10.0"
 ```
 
 ### From Source
