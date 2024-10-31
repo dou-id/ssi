@@ -3,6 +3,7 @@ use ssi_claims_core::{ClaimsValidity, DateTimeProvider, InvalidClaims, Verifiabl
 use ssi_data_integrity::{CryptographicSuite, DataIntegrity};
 use static_iref::iri;
 use xsd_types::DateTime;
+use chrono::Utc;
 
 use crate::{v1::syntax::VERIFIABLE_CREDENTIAL_TYPE, Identified, MaybeIdentified, Typed};
 
@@ -140,14 +141,14 @@ pub trait Credential {
             .issuance_date()
             .ok_or(InvalidClaims::MissingIssuanceDate)?;
 
-        let valid_from = issuance_date.earliest().to_utc();
+        let valid_from = issuance_date.earliest().with_timezone(&Utc);
         if valid_from > now {
             // Credential is issued in the future!
             return Err(InvalidClaims::Premature { now, valid_from });
         }
 
         if let Some(t) = self.expiration_date() {
-            let valid_until = t.latest().to_utc();
+            let valid_until = t.latest().with_timezone(&Utc);
             if now >= valid_until {
                 // Credential has expired.
                 return Err(InvalidClaims::Expired { now, valid_until });
