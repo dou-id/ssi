@@ -1,55 +1,86 @@
 // To generate test vectors:
-// cargo run --example issue ldp > examples/vc.jsonld
-// cargo run --example issue jwt > examples/vc.jwt
+// cargo run --example issue ldp > examples/files/vc.jsonld
+// cargo run --example issue jwt > examples/files/vc.jwt
 
-#[async_std::main]
-async fn main() {
+use serde_json::json;
+use ssi_claims::{
+    data_integrity::{AnySuite, CryptographicSuite, ProofOptions},
+    jws::JwsPayload,
+    vc::v1::ToJwtClaims,
+    VerificationParameters,
+};
+use ssi_dids::DIDResolver;
+use ssi_verification_methods::SingleSecretSigner;
+use static_iref::iri;
+
+async fn issue(proof_format: &str) {
     let key_str = include_str!("../tests/rsa2048-2020-08-25.json");
-    let key: ssi::jwk::JWK = serde_json::from_str(key_str).unwrap();
-    let resolver = &ssi::did::example::DIDExample;
-    let vc = serde_json::json!({
+    let mut key: ssi::jwk::JWK = serde_json::from_str(key_str).unwrap();
+    key.key_id = Some("did:example:foo#key1".to_string());
+    let resolver = ssi::dids::example::ExampleDIDResolver::default().into_vm_resolver();
+    let params = VerificationParameters::from_resolver(&resolver);
+    let signer = SingleSecretSigner::new(key.clone()).into_local();
+
+    let vc: ssi::claims::vc::v1::SpecializedJsonCredential = serde_json::from_value(json!({
         "@context": ["https://www.w3.org/2018/credentials/v1"],
         "type": "VerifiableCredential",
         "issuer": "did:example:foo",
-        "issuanceDate": ssi::ldp::now_ms(),
+        "issuanceDate": ssi::xsd::DateTime::now(),
         "credentialSubject": {
-            "id": "urn:uuid:".to_string() + &uuid::Uuid::new_v4().to_string()
+            "id": uuid::Uuid::new_v4().urn().to_string()
         }
-    });
-    let mut vc: ssi::vc::Credential = serde_json::from_value(vc).unwrap();
-    let mut proof_options = ssi::vc::LinkedDataProofOptions::default();
-    let verification_method = "did:example:foo#key1".to_string();
-    proof_options.verification_method = Some(ssi::vc::URI::String(verification_method));
-    let proof_format = std::env::args().nth(1);
-    let mut context_loader = ssi::jsonld::ContextLoader::default();
-    match &proof_format.unwrap()[..] {
+    }))
+    .unwrap();
+
+    let verification_method = iri!("did:example:foo#key1").into();
+
+    match proof_format {
         "ldp" => {
-            let proof = vc
-                .generate_proof(&key, &proof_options, resolver, &mut context_loader)
-                .await
-                .unwrap();
-            vc.add_proof(proof);
-            let result = vc.verify(None, resolver, &mut context_loader).await;
-            if !result.errors.is_empty() {
-                panic!("verify failed: {:#?}", result);
+            let options =
+                ProofOptions::from_method_and_options(verification_method, Default::default());
+
+            let suite = AnySuite::pick(&key, options.verification_method.as_ref()).unwrap();
+            let vc = suite.sign(vc, &resolver, &signer, options).await.unwrap();
+
+            let result = vc.verify(params).await.expect("verification failed");
+            if let Err(e) = result {
+                panic!("verify failed: {e}");
             }
+
             let stdout_writer = std::io::BufWriter::new(std::io::stdout());
             serde_json::to_writer_pretty(stdout_writer, &vc).unwrap();
         }
         "jwt" => {
-            proof_options.created = None;
-            proof_options.checks = None;
-            let jwt = vc
-                .generate_jwt(Some(&key), &proof_options, resolver)
-                .await
-                .unwrap();
-            let result =
-                ssi::vc::Credential::verify_jwt(&jwt, None, resolver, &mut context_loader).await;
-            if !result.errors.is_empty() {
-                panic!("verify failed: {:#?}", result);
+            let jwt = vc.to_jwt_claims().unwrap().sign(&key).await.unwrap();
+
+            let result = jwt.verify(params).await.expect("verification failed");
+            if let Err(e) = result {
+                panic!("verify failed: {e}");
             }
+
             print!("{}", jwt);
         }
         format => panic!("unknown proof format: {}", format),
+    }
+}
+
+#[async_std::main]
+async fn main() {
+    let proof_format = std::env::args().nth(1);
+    issue(&proof_format.unwrap()[..]).await;
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[async_std::test]
+    async fn ldp() {
+        issue("ldp").await;
+    }
+
+    #[async_std::test]
+    async fn jwt() {
+        issue("jwt").await;
     }
 }
