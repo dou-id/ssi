@@ -30,8 +30,11 @@ pub type ToRdfError<
 > = json_ld::ToRdfError<Span, E, C>;
 
 pub const CREDENTIALS_V1_CONTEXT: Iri = iri!("https://www.w3.org/2018/credentials/v1");
+pub const CREDENTIALS_V2_CONTEXT: Iri = iri!("https://www.w3.org/ns/credentials/v2");
 pub const CREDENTIALS_EXAMPLES_V1_CONTEXT: Iri =
     iri!("https://www.w3.org/2018/credentials/examples/v1");
+pub const CREDENTIALS_EXAMPLES_V2_CONTEXT: Iri =
+    iri!("https://www.w3.org/ns/credentials/examples/v2");
 pub const ODRL_CONTEXT: Iri = iri!("https://www.w3.org/ns/odrl.jsonld");
 pub const SECURITY_V1_CONTEXT: Iri = iri!("https://w3id.org/security/v1");
 pub const SECURITY_V2_CONTEXT: Iri = iri!("https://w3id.org/security/v2");
@@ -50,6 +53,8 @@ pub const LDS_JWS2020_V1_CONTEXT: Iri =
     iri!("https://w3c-ccg.github.io/lds-jws2020/contexts/lds-jws2020-v1.json");
 pub const W3ID_JWS2020_V1_CONTEXT: Iri = iri!("https://w3id.org/security/suites/jws-2020/v1");
 pub const W3ID_ED2020_V1_CONTEXT: Iri = iri!("https://w3id.org/security/suites/ed25519-2020/v1");
+pub const W3ID_MULTIKEY_V1_CONTEXT: Iri = iri!("https://w3id.org/security/multikey/v1");
+pub const W3ID_DATA_INTEGRITY_V1_CONTEXT: Iri = iri!("https://w3id.org/security/data-integrity/v1");
 pub const BLOCKCHAIN2021_V1_CONTEXT: Iri =
     iri!("https://w3id.org/security/suites/blockchain-2021/v1");
 pub const CITIZENSHIP_V1_CONTEXT: Iri = iri!("https://w3id.org/citizenship/v1");
@@ -100,9 +105,17 @@ lazy_static::lazy_static! {
         CREDENTIALS_V1_CONTEXT,
         ssi_contexts::CREDENTIALS_V1
     );
+    pub static ref CREDENTIALS_V2_CONTEXT_DOCUMENT: RemoteDocument = load_static_context(
+        CREDENTIALS_V2_CONTEXT,
+        ssi_contexts::CREDENTIALS_V2
+    );
     pub static ref CREDENTIALS_EXAMPLES_V1_CONTEXT_DOCUMENT: RemoteDocument = load_static_context(
         CREDENTIALS_EXAMPLES_V1_CONTEXT,
         ssi_contexts::CREDENTIALS_EXAMPLES_V1
+    );
+    pub static ref CREDENTIALS_EXAMPLES_V2_CONTEXT_DOCUMENT: RemoteDocument = load_static_context(
+        CREDENTIALS_EXAMPLES_V2_CONTEXT,
+        ssi_contexts::CREDENTIALS_EXAMPLES_V2
     );
     pub static ref ODRL_CONTEXT_DOCUMENT: RemoteDocument = load_static_context(
         ODRL_CONTEXT,
@@ -157,6 +170,14 @@ lazy_static::lazy_static! {
     pub static ref W3ID_ED2020_V1_CONTEXT_DOCUMENT: RemoteDocument = load_static_context(
         W3ID_ED2020_V1_CONTEXT,
         ssi_contexts::W3ID_ED2020_V1
+    );
+    pub static ref W3ID_MULTIKEY_V1_CONTEXT_DOCUMENT: RemoteDocument = load_static_context(
+        W3ID_MULTIKEY_V1_CONTEXT,
+        ssi_contexts::W3ID_MULTIKEY_V1
+    );
+    pub static ref W3ID_DATA_INTEGRITY_V1_CONTEXT_DOCUMENT: RemoteDocument = load_static_context(
+        W3ID_DATA_INTEGRITY_V1_CONTEXT,
+        ssi_contexts::W3ID_DATA_INTEGRITY_V1
     );
     pub static ref BLOCKCHAIN2021_V1_CONTEXT_DOCUMENT: RemoteDocument = load_static_context(
         BLOCKCHAIN2021_V1_CONTEXT,
@@ -282,8 +303,12 @@ impl Loader<IriBuf, Span> for StaticLoader {
             iri_match! {
                 match url {
                     CREDENTIALS_V1_CONTEXT => Ok(CREDENTIALS_V1_CONTEXT_DOCUMENT.clone()),
+                    CREDENTIALS_V2_CONTEXT => Ok(CREDENTIALS_V2_CONTEXT_DOCUMENT.clone()),
                     CREDENTIALS_EXAMPLES_V1_CONTEXT => {
                         Ok(CREDENTIALS_EXAMPLES_V1_CONTEXT_DOCUMENT.clone())
+                    },
+                    CREDENTIALS_EXAMPLES_V2_CONTEXT => {
+                        Ok(CREDENTIALS_EXAMPLES_V2_CONTEXT_DOCUMENT.clone())
                     },
                     ODRL_CONTEXT => Ok(ODRL_CONTEXT_DOCUMENT.clone()),
                     SECURITY_V1_CONTEXT => Ok(SECURITY_V1_CONTEXT_DOCUMENT.clone()),
@@ -301,6 +326,8 @@ impl Loader<IriBuf, Span> for StaticLoader {
                     LDS_JWS2020_V1_CONTEXT => Ok(LDS_JWS2020_V1_CONTEXT_DOCUMENT.clone()),
                     W3ID_JWS2020_V1_CONTEXT => Ok(W3ID_JWS2020_V1_CONTEXT_DOCUMENT.clone()),
                     W3ID_ED2020_V1_CONTEXT => Ok(W3ID_ED2020_V1_CONTEXT_DOCUMENT.clone()),
+                    W3ID_MULTIKEY_V1_CONTEXT => Ok(W3ID_MULTIKEY_V1_CONTEXT_DOCUMENT.clone()),
+                    W3ID_DATA_INTEGRITY_V1_CONTEXT => Ok(W3ID_DATA_INTEGRITY_V1_CONTEXT_DOCUMENT.clone()),
                     BLOCKCHAIN2021_V1_CONTEXT => Ok(BLOCKCHAIN2021_V1_CONTEXT_DOCUMENT.clone()),
                     CITIZENSHIP_V1_CONTEXT => Ok(CITIZENSHIP_V1_CONTEXT_DOCUMENT.clone()),
                     VACCINATION_V1_CONTEXT => Ok(VACCINATION_V1_CONTEXT_DOCUMENT.clone()),
@@ -476,7 +503,7 @@ impl Loader<IriBuf, Span> for ContextLoader {
                 context_map
                     .read()
                     .await
-                    .get(url.as_str())
+                    .get(&url)
                     .cloned()
                     .ok_or(UnknownContext(url))
             } else {
@@ -557,4 +584,71 @@ where
             q.map_predicate(|p| p.into_iri().unwrap())
         })
         .collect())
+}
+
+#[cfg(test)]
+mod test {
+    use serde_json::json;
+
+    use super::*;
+
+    #[tokio::test]
+    async fn context_loader() {
+        let mut cl = ContextLoader::default().with_context_map_from([(
+            "https://w3id.org/age/v1".to_string(),
+            serde_json::to_string(&json!({
+              "@context": {
+                "@protected": "true",
+                "id": "@id",
+                "type": "@type",
+                "description": "https://schema.org/description",
+                "image": {
+                  "@id": "https://schema.org/image",
+                  "@type": "@id"
+                },
+                "name": "https://schema.org/name",
+                "overAge": {
+                  "@id": "https://w3id.org/age#overAge",
+                  "@type": "http://www.w3.org/2001/XMLSchema#positiveInteger"
+                },
+                "concealedIdToken": {
+                  "@id": "https://w3id.org/cit#concealedIdToken",
+                  "@type": "https://w3id.org/security#multibase"
+                },
+                "anchoredResource": {
+                  "@type": "@id",
+                  "@id": "https://w3id.org/security#anchoredResource"
+                },
+                "digestMultibase": {
+                  "@id": "https://w3id.org/security#digestMultibase",
+                  "@type": "https://w3id.org/security#multibase"
+                },
+                "PersonalPhotoCredential": "https://convenience.org/vocab#PersonalPhotoCredential",
+                "OverAgeTokenCredential": "https://w3id.org/age#OverAgeTokenCredential",
+                "VerifiableCredentialRefreshService2021": {
+                  "@id": "https://w3id.org/vc-refresh-service#VerifiableCredentialRefreshService2021",
+                  "@context": {
+                    "@protected": true,
+                    "url": {
+                      "@id": "https://schema.org/url",
+                      "@type": "@id"
+                    },
+                    "refreshToken": {
+                      "@id": "https://w3id.org/vc-refresh-service#refreshToken",
+                      "@type": "https://w3id.org/security#multibase"
+                    }
+                  }
+                },
+                "AgeVerificationCredential": "https://w3id.org/age#AgeVerificationCredential",
+                "AgeVerificationContainerCredential": "https://w3id.org/age#AgeVerificationContainerCredential"
+              }
+            })).unwrap())]
+            .iter()
+                .cloned()
+                .collect(),
+                ).unwrap() ;
+        cl.load_with(&mut (), IriBuf::new("https://w3id.org/age/v1").unwrap())
+            .await
+            .unwrap();
+    }
 }
