@@ -1,6 +1,6 @@
 [package]
 name = "ssi"
-version = "0.7.0"
+version = "0.10.0"
 authors = ["PitPa, Inc."]
 edition = "2021"
 license = "Apache-2.0"
