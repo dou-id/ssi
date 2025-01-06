@@ -34,7 +34,7 @@ ssi = "0.4"
 ### From Source
 
 ```sh
-$ git clone https://github.com/spruceid/ssi
+$ git clone https://github.com/dou-id/ssi
 $ cd ssi
 $ git submodule update --init
 $ cargo build
